@@ -6,9 +6,10 @@ module.exports = {
             ref: "origin/master",
             repo: "git@github.com:Skakruk/lodb-mobile.git",
             path: "/opt/lodb/mobile",
-            "post-deploy": "REACT_APP_API_SERVER=https://api.lodb.org.ua yarn install && yarn build",
+            "post-deploy": "yarn install && yarn build",
             env: {
-                NODE_ENV: "dev"
+                NODE_ENV: "dev",
+                REACT_APP_API_SERVER: "https://api.lodb.org.ua"
             }
         }
     }
