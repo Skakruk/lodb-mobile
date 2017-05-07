@@ -8,8 +8,7 @@ module.exports = {
             path: "/opt/lodb/mobile",
             "post-deploy": "yarn install && yarn build",
             env: {
-                NODE_ENV: "dev",
-                REACT_APP_API_SERVER: "https://api.lodb.org.ua"
+                NODE_ENV: "dev"
             }
         }
     }
