@@ -5,7 +5,7 @@ const getHeaders = (additionalHeaders = {}) => {
   }, additionalHeaders)
 };
 
-let host = `http://${(typeof location !== 'undefined' ? location.hostname : 'localhost')}:3001/mobile`;
+let host = `${process.env.REACT_APP_API_SERVER}/mobile`;
 
 const handleErrors = (response, cb, params) => {
   if (response.ok) return response.json();
