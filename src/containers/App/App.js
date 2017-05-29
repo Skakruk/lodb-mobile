@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -7,6 +6,9 @@ import './App.css';
 import {connect} from "react-redux";
 
 class App extends Component {
+    context = {
+        router: React.PropTypes.object
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -36,10 +38,14 @@ class App extends Component {
         open: !this.state.open
     });
 
-    handleClose = () => this.setState({
-        ...this.state,
-        open: false
-    });
+    handleClose = (link) => () => {
+        this.setState({
+            ...this.state,
+            open: false
+        }, () => {
+            this.props.router.push(link);
+        });
+    };
 
     render() {
         const {appConfig} = this.props;
@@ -57,11 +63,11 @@ class App extends Component {
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({open})}
                         >
-                            <MenuItem containerElement={<Link to="/catalog" />} onTouchTap={this.handleClose}>Електронний каталог</MenuItem>
-                            <MenuItem containerElement={<Link to="/" />} onTouchTap={this.handleClose}>Новини</MenuItem>
-                            <MenuItem containerElement={<Link to="/latest-arrivals" />} onTouchTap={this.handleClose}>Нові надходження книг</MenuItem>
-                            <MenuItem containerElement={<Link to="/orderings" />} onTouchTap={this.handleClose}>Запитання онлайн</MenuItem>
-                            <MenuItem containerElement={<Link to="/events" />} onTouchTap={this.handleClose}>Реєстрація на заходи</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/catalog")}>Електронний каталог</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/")}>Новини</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/latest-arrivals")}>Нові надходження книг</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/orderings")}>Запитання онлайн</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/events")}>Реєстрація на заходи</MenuItem>
                         </Drawer>
                     </div>) : null
                 }
