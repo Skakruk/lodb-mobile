@@ -28,19 +28,16 @@ class App extends Component {
     setRouteProps(props) {
         let activeRoute = props.routes[props.routes.length-1];
         this.setState({
-            ...this.state,
             title: activeRoute.title
         });
     }
 
     handleToggle = () => this.setState({
-        ...this.state,
         open: !this.state.open
     });
 
     handleClose = (link) => () => {
         this.setState({
-            ...this.state,
             open: false
         }, () => {
             this.props.router.push(link);
@@ -59,15 +56,18 @@ class App extends Component {
                         />
                         <Drawer
                             docked={false}
-                            width={200}
+                            width={'80%'}
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({open})}
                         >
-                            <MenuItem onTouchTap={this.handleClose("/catalog")}>Електронний каталог</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/about")}>Про бібліотеку</MenuItem>
                             <MenuItem onTouchTap={this.handleClose("/")}>Новини</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/catalog")}>Електронний каталог</MenuItem>
                             <MenuItem onTouchTap={this.handleClose("/latest-arrivals")}>Нові надходження книг</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/orderings")}>Запитання онлайн</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/events")}>Реєстрація на заходи</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/orderings")}>Продовження книг онлайн</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/chat")}>Запитання онлайн</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/help")}>Допоможіть своїй бібліотеці</MenuItem>
+                            <MenuItem onTouchTap={this.handleClose("/lost-items")}>Загублені речі</MenuItem>
                         </Drawer>
                     </div>) : null
                 }

@@ -5,6 +5,7 @@ import NewsList from './containers/News/NewsList';
 import News from './containers/News/News';
 import Catalog from './containers/Catalog/Catalog';
 import LatestArrivals from './containers/LatestArrivals/LatestArrivals';
+import Chat from './containers/Chat';
 
 export default function () {
     return (
@@ -15,6 +16,7 @@ export default function () {
             <Route path="/latest-arrivals" title="Нові надходження книг" component={LatestArrivals}/>
             <Route path="/orderings" title="Запитання онлайн" />
             <Route path="/events" title="Реєстрація на заходи" />
+            <Route path="/chat" title="Запитання онлайн" component={Chat} />
         </Route>
     );
 }
