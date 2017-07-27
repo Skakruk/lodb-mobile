@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+const SITE_ID = 'HO09kaR0Kf';
+
 class Chat extends Component {
     constructor(...args) {
         super(...args);
@@ -9,7 +11,7 @@ class Chat extends Component {
 
     componentDidMount() {
         const addScript = document.createElement('script');
-        addScript.setAttribute('src', '//code.jivosite.com/script/widget/5l3OZQZK5r');
+        addScript.setAttribute('src', `//code.jivosite.com/script/widget/${SITE_ID}`);
         this.container.appendChild(addScript);
     }
 
