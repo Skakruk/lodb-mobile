@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
+import Parser from 'html-react-parser';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 import {amber50} from 'material-ui/styles/colors';
 import {Card, CardActions, CardText, CardTitle, CardMedia} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import TimeAgo from 'timeago-react';
 
-import './News.css';
 import {latestNews} from '../../actions/news';
 
-import Parser from 'html-react-parser';
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
+import './News.css';
 
 const styles = {
     backgroundColor: amber50
@@ -31,6 +31,7 @@ class NewsContainer extends Component {
 
     render() {
         const {articles, latestNewsIds} = this.props;
+
         return (
             <div className="news-container" style={styles}>
                 {
@@ -38,25 +39,43 @@ class NewsContainer extends Component {
                         latestNewsIds.ids
                             .map(id => articles.list[id])
                             .map(news => {
-                                let title = <CardTitle title={news.title}
-                                                       subtitle={<TimeAgo
-                                                           datetime={news.publishedAt}
-                                                           locale='uk'/>
-                                                       }/>;
+                                let title = (
+                                    <CardTitle
+                                        title={news.title}
+                                        subtitle={(
+                                            <TimeAgo
+                                                datetime={news.publishedAt}
+                                                locale='uk'
+                                            />
+                                        )}
+                                    />
+                                );
+
                                 let link = null;
+
                                 if (['news', 'article'].includes(news.type)) {
-                                    link =
-                                        <FlatButton onTouchTap={this.handleTransition(news.id)} label="Читати далі"/>;
+                                    link = <FlatButton
+                                        onTouchTap={this.handleTransition(news.id)}
+                                        label="Читати далі"
+                                    />;
                                 } else if (news.type === 'reference') {
-                                    link = <a rel="noopener" href={news.content} target="_blank"><FlatButton label="Читати далі"/></a>;
+                                    link = <a rel="noopener" href={news.content} target="_blank">
+                                        <FlatButton label="Читати далі"/>
+                                    </a>;
                                 }
+
                                 return (
                                     <Card key={news.id} className="news-card">
                                         {
-                                            news.cover ? (<CardMedia overlay={title}>
-                                                <img src={news.cover}
-                                                     alt={`Головне зображення для статті ${news.title}`}/>
-                                            </CardMedia>) : title
+                                            news.cover
+                                                ? (
+                                                    <CardMedia overlay={title}>
+                                                        <img src={news.cover}
+                                                             alt={`Головне зображення для статті ${news.title}`}
+                                                        />
+                                                    </CardMedia>
+                                                )
+                                                : title
                                         }
                                         <CardText className="news-intro">{Parser(news.introtext)}</CardText>
                                         <CardText className="news-content" expandable={true}>

@@ -7,10 +7,12 @@ import CircularProgress from 'material-ui/CircularProgress';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import Share from 'material-ui/svg-icons/social/share';
 import {bindActionCreators} from "redux";
-import styles from './NewsStyles';
+import Parser from 'html-react-parser';
+
 import {articleById} from '../../actions/news';
 import {showBar, hideBar} from '../../actions/app';
-import Parser from 'html-react-parser';
+
+import styles from './NewsStyles';
 
 class NewsComponent extends Component {
     context = {

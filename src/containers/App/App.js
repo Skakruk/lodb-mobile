@@ -5,10 +5,37 @@ import MenuItem from 'material-ui/MenuItem';
 import './App.css';
 import {connect} from "react-redux";
 
+const menuItems = [{
+    url: '/about',
+    title: 'Про бібліотеку'
+}, {
+    url: '/',
+    title: 'Новини'
+}, {
+    url: '/catalog',
+    title: 'Електронний каталог'
+}, {
+    url: '/latest-arrivals',
+    title: 'Нові надходження книг'
+}, {
+    url: '/orderings',
+    title: 'Продовження книг онлайн'
+}, {
+    url: '/chat',
+    title: 'Запитання онлайн'
+}, {
+    url: '/help',
+    title: 'Допоможіть своїй бібліотеці'
+}, {
+    url: '/lost-items',
+    title: 'Загублені речі'
+}];
+
 class App extends Component {
     context = {
         router: React.PropTypes.object
     };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +53,7 @@ class App extends Component {
     }
 
     setRouteProps(props) {
-        let activeRoute = props.routes[props.routes.length-1];
+        let activeRoute = props.routes[props.routes.length - 1];
         this.setState({
             title: activeRoute.title
         });
@@ -45,7 +72,8 @@ class App extends Component {
     };
 
     render() {
-        const {appConfig} = this.props;
+        const {appConfig, children} = this.props;
+
         return (
             <div className="App">
                 {
@@ -60,18 +88,20 @@ class App extends Component {
                             open={this.state.open}
                             onRequestChange={(open) => this.setState({open})}
                         >
-                            <MenuItem onTouchTap={this.handleClose("/about")}>Про бібліотеку</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/")}>Новини</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/catalog")}>Електронний каталог</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/latest-arrivals")}>Нові надходження книг</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/orderings")}>Продовження книг онлайн</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/chat")}>Запитання онлайн</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/help")}>Допоможіть своїй бібліотеці</MenuItem>
-                            <MenuItem onTouchTap={this.handleClose("/lost-items")}>Загублені речі</MenuItem>
+                            {
+                                menuItems.map(item => (
+                                    <MenuItem
+                                        key={ item.url }
+                                        onTouchTap={this.handleClose(item.url)}
+                                    >
+                                        {item.title}
+                                    </MenuItem>
+                                ))
+                            }
                         </Drawer>
                     </div>) : null
                 }
-                {this.props.children}
+                {children}
             </div>
         );
     }

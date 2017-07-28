@@ -6,6 +6,7 @@ import News from './containers/News/News';
 import Catalog from './containers/Catalog/Catalog';
 import LatestArrivals from './containers/LatestArrivals/LatestArrivals';
 import Chat from './containers/Chat';
+import About from './containers/About';
 
 export default function () {
     return (
@@ -17,6 +18,7 @@ export default function () {
             <Route path="/orderings" title="Запитання онлайн" />
             <Route path="/events" title="Реєстрація на заходи" />
             <Route path="/chat" title="Запитання онлайн" component={Chat} />
+            <Route path="/about" title="Запитання онлайн" component={About} />
         </Route>
     );
 }
