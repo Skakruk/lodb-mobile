@@ -18,7 +18,7 @@ const menuItems = [{
     url: '/latest-arrivals',
     title: 'Нові надходження книг'
 }, {
-    url: '/orderings',
+    url: '/book-prolongation',
     title: 'Продовження книг онлайн'
 }, {
     url: '/chat',

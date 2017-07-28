@@ -7,6 +7,7 @@ import Catalog from './containers/Catalog/Catalog';
 import LatestArrivals from './containers/LatestArrivals/LatestArrivals';
 import Chat from './containers/Chat';
 import About from './containers/About';
+import BookProlongation from './containers/BookProlongation';
 
 export default function () {
     return (
@@ -15,10 +16,10 @@ export default function () {
             <Route path="/news/:id" showBar={false} title="" component={News}/>
             <Route path="/catalog" title="Електронний каталог" component={Catalog}/>
             <Route path="/latest-arrivals" title="Нові надходження книг" component={LatestArrivals}/>
-            <Route path="/orderings" title="Запитання онлайн" />
+            <Route path="/book-prolongation" title="Продовження книг онлайн" component={BookProlongation}/>
             <Route path="/events" title="Реєстрація на заходи" />
             <Route path="/chat" title="Запитання онлайн" component={Chat} />
-            <Route path="/about" title="Запитання онлайн" component={About} />
+            <Route path="/about" title="Розклад роботи" component={About} />
         </Route>
     );
 }

@@ -19,7 +19,7 @@
     "timeago-react": "^1.0.8"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5"
+    "react-scripts": "^1.0.10"
   },
   "scripts": {
     "start": "react-scripts start",
