@@ -53,6 +53,10 @@ class BookProlongation extends Component {
 
       api.post('/book-prolongation', this.state.fields)
         .then(() => {
+          window.dataLayer.push({
+            "event": "prolongation-submit"
+          });
+
           this.setState({
             sending: false,
             snackbarOpen: true,

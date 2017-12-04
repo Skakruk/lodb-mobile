@@ -39,6 +39,10 @@ class LostItems extends React.Component {
   }
 
   handleItemClick = (item) => () => {
+    window.dataLayer.push({
+      "event": "lost-item-show"
+    });
+
     this.setState({
       selectedItem: item,
     })

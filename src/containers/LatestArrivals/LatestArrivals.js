@@ -26,7 +26,9 @@ class LatestArrivalsContainer extends Component {
   }
 
   handleTileClick = (book) => () => {
-    window.scrollTo(0, 0);
+    window.dataLayer.push({
+      "event": "latest-arrival-show"
+    });
 
     this.setState({
       selectedBook: book

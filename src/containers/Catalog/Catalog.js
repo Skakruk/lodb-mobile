@@ -85,6 +85,10 @@ class CatalogContainer extends Component {
   };
 
   handleSearch = () => {
+    window.dataLayer.push({
+      "event": "perform-catalog-search"
+    });
+
     this.setState({
       results: {
         loading: true,
