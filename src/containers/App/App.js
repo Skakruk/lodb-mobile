@@ -1,114 +1,76 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import AppBar from 'material-ui/AppBar';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import './App.css';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
+import { withRouter, matchPath } from 'react-router-dom';
 
-const menuItems = [{
-    url: '/about',
-    title: 'Про бібліотеку'
-}, {
-    url: '/',
-    title: 'Новини'
-}, {
-    url: '/catalog',
-    title: 'Електронний каталог'
-}, {
-    url: '/latest-arrivals',
-    title: 'Нові надходження книг'
-}, {
-    url: '/book-prolongation',
-    title: 'Продовження книг онлайн'
-}, {
-    url: '/chat',
-    title: 'Запитання онлайн'
-}, {
-    url: '/help',
-    title: 'Допоможіть своїй бібліотеці'
-}, {
-    url: '/lost-items',
-    title: 'Загублені речі'
-}];
+import Menu from '../../components/Menu';
+import createRouter, { routes } from '../../routes';
+
+import './App.css';
 
 class App extends Component {
-    context = {
-        router: React.PropTypes.object
-    };
+  state = {
+    open: false,
+    pageTitle: ''
+  };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            open: false,
-            title: null
-        };
+  handleToggle = () => this.setState({
+    open: !this.state.open
+  });
+
+  componentWillMount() {
+    this.setPageTitle(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.setPageTitle(nextProps);
     }
+  }
 
-    componentWillReceiveProps(newProps) {
-        this.setRouteProps(newProps);
-    }
+  setPageTitle(props) {
+    const route = this._matchRoute(props);
 
-    componentWillMount() {
-        this.setRouteProps(this.props);
-    }
-
-    setRouteProps(props) {
-        let activeRoute = props.routes[props.routes.length - 1];
-        this.setState({
-            title: activeRoute.title
-        });
-    }
-
-    handleToggle = () => this.setState({
-        open: !this.state.open
+    this.setState({
+      pageTitle: route.title,
     });
+  }
 
-    handleClose = (link) => () => {
-        this.setState({
-            open: false
-        }, () => {
-            this.props.router.push(link);
-        });
-    };
+  _matchRoute(props) {
+    return routes.reduce((acc, route) => {
+      if (matchPath(props.location.pathname, route)) {
+        acc = route;
+      }
+      return acc;
+    }, {});
+  }
 
-    render() {
-        const {appConfig, children} = this.props;
+  handleClose = (open) => this.setState({ open });
 
-        return (
-            <div className="App">
-                {
-                    appConfig.showBar ? (<div>
-                        <AppBar
-                            onLeftIconButtonTouchTap={this.handleToggle}
-                            iconClassNameRight="muidocs-icon-navigation-expand-more"
-                        />
-                        <Drawer
-                            docked={false}
-                            width={'80%'}
-                            open={this.state.open}
-                            onRequestChange={(open) => this.setState({open})}
-                        >
-                            {
-                                menuItems.map(item => (
-                                    <MenuItem
-                                        key={ item.url }
-                                        onTouchTap={this.handleClose(item.url)}
-                                    >
-                                        {item.title}
-                                    </MenuItem>
-                                ))
-                            }
-                        </Drawer>
-                    </div>) : null
-                }
-                {children}
-            </div>
-        );
-    }
+  render() {
+    const { appConfig } = this.props;
+    const { pageTitle } = this.state;
+
+    return (
+      <div className="App">
+        {
+          appConfig.showBar ? (<div>
+            <AppBar
+              title={pageTitle}
+              onLeftIconButtonTouchTap={this.handleToggle}
+              iconClassNameRight="muidocs-icon-navigation-expand-more"
+            />
+            <Menu open={this.state.open} onClose={this.handleClose} />
+          </div>) : null
+        }
+        {createRouter()}
+      </div>
+    );
+  }
 }
 
 const mapStoreToProps = store => ({
-    appConfig: store.app
+  appConfig: store.app
 });
 
-export default connect(mapStoreToProps)(App);
+export default withRouter(connect(mapStoreToProps)(App));

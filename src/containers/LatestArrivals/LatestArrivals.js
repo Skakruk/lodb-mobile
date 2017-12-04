@@ -1,74 +1,90 @@
-import React, {Component} from 'react';
-import injectSheet from 'react-jss';
-import {getLatest} from '../../actions/latestArrivals';
-import {
-    CircularProgress, GridTile
-} from "material-ui";
-import styles from './LatestArrivalsStyles'
-import {GridList} from "material-ui/GridList/index";
-import Book from "./Book";
+import React, { Component } from 'react';
+import { CircularProgress, Dialog, FlatButton, GridTile } from 'material-ui';
+import { GridList } from 'material-ui/GridList/index';
+import Book from './Book';
+
+import api from '../../helpers/api';
+import c from './LatestArrivals.scss';
+
+const customContentStyle = {
+  width: '100%',
+  maxWidth: 'none',
+};
 
 class LatestArrivalsContainer extends Component {
-    state = {
-        bookList: null,
-        selectedBook: null
-    };
+  state = {
+    bookList: null,
+    selectedBook: null
+  };
 
-    componentWillMount() {
-        getLatest().then(response => {
-            this.setState({
-                ...this.state,
-                bookList: response.items
-            })
-        })
-    }
+  componentWillMount() {
+    api.get('/latest-arrivals').then(response => {
+      this.setState({
+        bookList: response.items
+      })
+    })
+  }
 
-    handleTileClick = (book) => () => {
-        this.setState({
-            ...this.state,
-            selectedBook: book
-        })
-    };
+  handleTileClick = (book) => () => {
+    window.scrollTo(0, 0);
 
-    handleBackBtn = () => {
-        this.setState({
-            ...this.state,
-            selectedBook: null
-        })
-    };
+    this.setState({
+      selectedBook: book
+    })
+  };
 
-    render() {
-        const {bookList, selectedBook} = this.state;
-        const {classes} = this.props;
-        return (
-            <div>
+  handleClose = () => {
+    this.setState({
+      selectedBook: null
+    })
+  };
+
+  render() {
+    const { bookList, selectedBook } = this.state;
+
+    return (
+      <div>
+        <div>
+          {
+            bookList ? (
+              <GridList cellHeight={220}>
                 {
-                    selectedBook ? (
-                        <Book book={selectedBook} onBack={this.handleBackBtn}/>
-                    ) : (
-                        <div>
-                            <h1>Нові надходження</h1>
-
-                            {
-                                bookList ? (
-                                    <GridList cellHeight={220}>
-                                        {
-                                            bookList.map((book, i) => (
-                                                <GridTile key={i} onTouchTap={this.handleTileClick(book)}>
-                                                    <img alt={`Обкладинка до книги ${book.title}`} src={book.image}/>
-                                                </GridTile>
-                                            ))
-                                        }
-                                    </GridList>) :
-                                    <div className={classes.loadingWrap}><CircularProgress size={60} thickness={7}/></div>
-                            }
-                        </div>
-                    )
+                  bookList.map((book, i) => (
+                    <GridTile
+                      key={i}
+                      onTouchTap={this.handleTileClick(book)}
+                    >
+                      <img alt={`Обкладинка до книги ${book.title}`} src={book.image} />
+                    </GridTile>
+                  ))
                 }
-
-            </div>
-        )
-    }
+              </GridList>
+            ) : (
+              <div className={c.loadingWrap}>
+                <CircularProgress size={60} thickness={7} />
+              </div>
+            )
+          }
+        </div>
+        <Dialog
+          actions={[
+            <FlatButton
+              label="Закрити"
+              primary={true}
+              onClick={this.handleClose}
+            />
+          ]}
+          modal={false}
+          open={selectedBook !== null}
+          onRequestClose={this.handleClose}
+          autoScrollBodyContent={true}
+          contentStyle={customContentStyle}
+        >
+          <Book book={selectedBook} onBack={this.handleClose} />
+        </Dialog>
+      </div>
+    )
+  }
 }
 
-export default injectSheet(styles)(LatestArrivalsContainer);
+export default LatestArrivalsContainer;

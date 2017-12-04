@@ -1,21 +1,21 @@
 import React from 'react';
-import injectSheet from 'react-jss';
 
-import styles from './AboutStyles';
+import c from './About.scss';
 
-function About({classes}) {
-
+function About() {
     return (
-        <div className={classes.container}>
-            <table className={classes.table} cellPadding="7" cellSpacing="0">
+        <div className={c.container}>
+            <table className={c.table} cellPadding="7" cellSpacing="0">
                 <thead>
-                <th>Назва відділу</th>
-                <th>Години роботи</th>
-                <th>Вихідні дні</th>
+                <tr>
+                    <th>Назва відділу</th>
+                    <th>Години роботи</th>
+                    <th>Вихідні дні</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td colSpan="3" className={classes.subtitle}>
+                    <td colSpan="3" className={c.subtitle}>
                         Вересень &ndash; травень
                     </td>
                 </tr>
@@ -72,7 +72,7 @@ function About({classes}) {
                     </td>
                 </tr>
                 <tr>
-                    <td colSpan="3" className={classes.subtitle}>
+                    <td colSpan="3" className={c.subtitle}>
                         Червень &ndash; серпень
                     </td>
                 </tr>
@@ -85,13 +85,13 @@ function About({classes}) {
             </table>
             <p>Загальні вихідні дні &ndash; субота неділя</p>
             <p>Останній понеділок місяця &ndash; санітарний день</p>
-            <div className={classes.eveningAbon}>
+            <div className={c.eveningAbon}>
                 <p>
                     Якщо ви не встигаєте завітати до нас протягом
                     робочого дня &ndash; саме для вас наша послуга &ndash;
                     &laquo;Вечірній абонемент&raquo;:
                 </p>
-                <img src="//lodb.org.ua/assets/images/noc.jpg" height="187" width="155"/>
+                <img src="//lodb.org.ua/assets/images/noc.jpg" alt="Логотип Вечірнього абонементу" height="187" width="155"/>
             </div>
             <ol>
                 <li>
@@ -111,4 +111,4 @@ function About({classes}) {
     )
 }
 
-export default injectSheet(styles)(About);
+export default About;
