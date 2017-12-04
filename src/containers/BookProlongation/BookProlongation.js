@@ -17,14 +17,17 @@ const departments = [
   'Абонемент 5-9 класів'
 ];
 
+const defaultFieldValues = {
+  name: '',
+  school: '',
+  department: departments[0],
+  email: ''
+};
+
 class BookProlongation extends Component {
   state = {
-    fields: {
-      name: '',
-      school: '',
-      department: departments[0],
-      email: ''
-    },
+    fields: { ...defaultFieldValues },
+    errors: new Set(),
     snackbarOpen: false,
     sending: false
   };
@@ -34,24 +37,50 @@ class BookProlongation extends Component {
   };
 
   handleSend = () => {
-    this.setState({
-      sending: true
-    });
-    api.post('/book-prolongation', this.state.fields)
-      .then(() => {
-        this.setState({
-          sending: false,
-          snackbarOpen: true
+    const { fields } = this.state;
+
+    const emptyFields = Object.keys(fields).reduce((acc, fieldKey) => {
+      if (!fields[fieldKey] || fields[fieldKey].length === 0) {
+        acc.add(fieldKey);
+      }
+      return acc;
+    }, new Set());
+
+    if (emptyFields.size === 0) {
+      this.setState({
+        sending: true
+      });
+
+      api.post('/book-prolongation', this.state.fields)
+        .then(() => {
+          this.setState({
+            sending: false,
+            snackbarOpen: true,
+            fields: { ...defaultFieldValues },
+            errors: new Set(),
+          });
         });
+    } else {
+      this.setState({
+        errors: emptyFields
       })
+    }
   };
 
   handleFieldChange = (field) => (e, value) => {
+    const { errors } = this.state;
+    let newErrors = new Set(errors);
+
+    if (value.length > 0 && newErrors.has(field)) {
+      newErrors.delete(field);
+    }
+
     this.setState({
       fields: {
         ...this.state.fields,
         [field]: value
-      }
+      },
+      errors: newErrors,
     });
   };
 
@@ -62,7 +91,7 @@ class BookProlongation extends Component {
   };
 
   render() {
-    const { sending, snackbarOpen, fields: { name, school, department, email } } = this.state;
+    const { sending, snackbarOpen, fields: { name, school, department, email }, errors } = this.state;
 
     return (
       <div>
@@ -80,12 +109,14 @@ class BookProlongation extends Component {
             floatingLabelText="Твоє прізвище та ім'я"
             value={name}
             onChange={this.handleFieldChange('name')}
+            errorText={errors.has('name') ? 'Необхідно заповнити це поле' : null}
           />
           <TextField
             fullWidth
             floatingLabelText="Школа / клас"
             value={school}
             onChange={this.handleFieldChange('school')}
+            errorText={errors.has('school') ? 'Необхідно заповнити це поле' : null}
           />
           <SelectField
             fullWidth
@@ -105,6 +136,7 @@ class BookProlongation extends Component {
             value={email}
             type="email"
             onChange={this.handleFieldChange('email')}
+            errorText={errors.has('email') ? 'Необхідно заповнити це поле' : null}
           />
           <RaisedButton label="Надіслати" primary={true} onTouchTap={this.handleSend} disabled={sending} />
           {sending
